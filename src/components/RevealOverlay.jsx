@@ -35,10 +35,12 @@ export default function RevealOverlay({ result, startAt, votes, onClose }) {
   const lastN = useRef(null);
   const exploded = useRef(false);
 
+  const done = elapsed >= EXPLODE_AT;
   useEffect(() => {
+    if (done) return; // depois da explosao nao precisa mais acompanhar o relogio
     const id = setInterval(() => setElapsed(Date.now() - startAt), 100);
     return () => clearInterval(id);
-  }, [startAt]);
+  }, [startAt, done]);
 
   const phase = elapsed < 0 ? 'wait' : elapsed < EXPLODE_AT ? 'countdown' : 'explode';
   const n = COUNT_FROM - Math.floor(Math.max(elapsed, 0) / 1000);

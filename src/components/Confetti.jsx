@@ -3,6 +3,10 @@ import { useEffect, useRef } from 'react';
 // Confete em canvas. `colors` define a paleta (usamos tons do lado revelado + dourado).
 export default function Confetti({ colors = ['#ffffff', '#c9a227', '#f0d060'] }) {
   const ref = useRef(null);
+  // cores lidas por ref: o pai re-renderiza com frequencia e um array novo
+  // a cada render reiniciaria a animacao (confete preso no topo da tela)
+  const colorsRef = useRef(colors);
+  colorsRef.current = colors;
 
   useEffect(() => {
     const canvas = ref.current;
@@ -27,7 +31,7 @@ export default function Confetti({ colors = ['#ffffff', '#c9a227', '#f0d060'] })
         y: Math.random() * -c.height,
         w: 6 + Math.random() * 8,
         h: 8 + Math.random() * 10,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: colorsRef.current[Math.floor(Math.random() * colorsRef.current.length)],
         vy: 2 + Math.random() * 4,
         vx: -1.5 + Math.random() * 3,
         rot: Math.random() * Math.PI,
@@ -62,7 +66,7 @@ export default function Confetti({ colors = ['#ffffff', '#c9a227', '#f0d060'] })
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
     };
-  }, [colors]);
+  }, []);
 
   return <canvas ref={ref} className="confete-canvas" />;
 }
