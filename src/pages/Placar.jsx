@@ -1,15 +1,21 @@
+import { useState } from 'react';
 import { useLiveState, useReveal } from '../live.js';
+import { unlockAudio } from '../sounds.js';
 import RevealOverlay from '../components/RevealOverlay.jsx';
 import Crest from '../components/Crest.jsx';
 import { calcOdds, fmtOdd } from '../odds.js';
 
 const SKEW = 8; // "inclinacao" da linha diagonal, em % da largura
-const EMPTY = { votes: [], tallies: { verde: 0, rosa: 0, total: 0 } };
+const EMPTY = { votes: [], tallies: { verde: 0, rosa: 0, total: 0 }, bettingOpen: true };
+const TICKER_SIZE = 12; // quantas apostas recentes passam na faixa
 
 export default function Placar() {
   const { state, connected: conectado, offsetRef } = useLiveState(1500);
   const [revelacao, fecharRevelacao] = useReveal(state, offsetRef);
-  const { votes, tallies } = state || EMPTY;
+  const { votes, tallies, bettingOpen } = state || EMPTY;
+  // O navegador so libera audio depois de um clique na pagina
+  const [somAtivo, setSomAtivo] = useState(false);
+  const recentes = [...votes].sort((a, b) => b.ts - a.ts).slice(0, TICKER_SIZE);
 
   const { verde, rosa, total } = tallies;
   const split = total > 0 ? (verde / total) * 100 : 50; // % que o VERDE ocupa (a partir da esquerda)
@@ -35,6 +41,18 @@ export default function Placar() {
         {conectado ? 'AO VIVO' : 'reconectando…'}
       </div>
 
+      {!somAtivo && (
+        <button
+          className="btn-ativar-som"
+          onClick={() => {
+            unlockAudio();
+            setSomAtivo(true);
+          }}
+        >
+          🔊 Clique para ativar o som
+        </button>
+      )}
+
       <div className="placar-topo">
         <Crest size={64} />
         <div className="badge">CHÁ REVELAÇÃO • AVANTI!</div>
@@ -55,8 +73,22 @@ export default function Placar() {
       </div>
 
       <div className="placar-total">
+        {!bettingOpen && <div className="encerradas">🔒 Apostas encerradas</div>}
         Total de apostas <b>{total}</b>
       </div>
+
+      {recentes.length > 0 && (
+        <div className="ticker">
+          {/* conteudo duplicado para a faixa rolar sem emenda */}
+          <div className="ticker-faixa" style={{ animationDuration: `${recentes.length * 4}s` }}>
+            {[...recentes, ...recentes].map((v, i) => (
+              <span key={i} className={`ticker-item ${v.choice}`}>
+                {v.name} apostou {v.choice === 'verde' ? 'no Menino 💚' : 'na Menina 💗'}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {revelacao && (
         <RevealOverlay

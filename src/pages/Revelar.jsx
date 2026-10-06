@@ -35,6 +35,15 @@ export default function Revelar() {
     else setPinErro('Não foi possível iniciar a revelação. Tente de novo.');
   }
 
+  async function alternarApostas() {
+    setPinErro('');
+    const sentAt = Date.now();
+    const action = state?.bettingOpen ? 'close' : 'open';
+    const r = await post('/api/reveal', { action, pin });
+    if (r.ok) apply(r.state, sentAt);
+    else setPinErro('Não foi possível alterar as apostas. Tente de novo.');
+  }
+
   async function reiniciarTudo() {
     if (!window.confirm('Apagar TODOS os votos e voltar ao estado inicial? Isso não tem volta.')) return;
     const sentAt = Date.now();
@@ -71,9 +80,6 @@ export default function Revelar() {
               </button>
             </div>
           </form>
-          <p className="rodape">
-            PIN padrão de fábrica: <b>1914</b> (troque na variável REVEAL_PIN antes da festa).
-          </p>
         </div>
       </div>
     );
@@ -101,10 +107,27 @@ export default function Revelar() {
         </div>
 
         <div className="admin-card">
+          <h1 className="titulo">Mercado de apostas</h1>
+          <p className="dica">
+            {state?.bettingOpen
+              ? '🟢 Apostas ABERTAS. Encerre alguns minutos antes da revelação, como numa casa de apostas.'
+              : '🔒 Apostas ENCERRADAS. Ninguém consegue votar nem trocar o voto.'}
+          </p>
+          <button
+            className={state?.bettingOpen ? 'btn-encerrar' : 'btn-ghost'}
+            onClick={alternarApostas}
+            disabled={!state || state.reveal.status !== 'idle'}
+          >
+            {state?.bettingOpen ? '🔒 Encerrar apostas' : '🔓 Reabrir apostas'}
+          </button>
+        </div>
+
+        <div className="admin-card">
           <h1 className="titulo">Qual é o resultado real?</h1>
           <p className="dica">
             Escolha o sexo verdadeiro do bebê e dispare a revelação. Todos os telões e esta tela
-            entram na contagem regressiva juntos. (A tela de votação NÃO é interrompida.)
+            entram na contagem regressiva juntos. As apostas fecham na hora e cada celular mostra
+            o resultado quando a contagem termina.
           </p>
 
           <div className="escolha-resultado">

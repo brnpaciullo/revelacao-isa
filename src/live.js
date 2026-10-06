@@ -55,6 +55,9 @@ export async function post(path, body) {
   return r.json().catch(() => ({ ok: false }));
 }
 
+// Duracao da contagem regressiva, do inicio ate a explosao.
+export const REVEAL_DURATION_MS = 5000;
+
 // Contagem (5s) + tempo para quem abre a pagina atrasado ainda pegar a revelacao.
 // Depois disso, uma revelacao antiga gravada no servidor nao reabre sozinha.
 const REVEAL_RESUME_MS = 7000;
@@ -87,4 +90,19 @@ export function useReveal(state, offsetRef) {
   }, []);
 
   return [revelacao, close];
+}
+
+// Id aleatorio deste aparelho, usado para prender o nome ao celular de quem votou.
+const DEVICE_KEY = 'revelacao:device';
+export function deviceId() {
+  try {
+    let id = localStorage.getItem(DEVICE_KEY);
+    if (!id) {
+      id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`.replace('.', '');
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
+  } catch {
+    return 'sem-storage';
+  }
 }

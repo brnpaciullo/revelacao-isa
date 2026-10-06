@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { useLiveState, post } from '../live.js';
+import { useLiveState, post, deviceId, REVEAL_DURATION_MS } from '../live.js';
 import { unlockAudio } from '../sounds.js';
 import Crest from '../components/Crest.jsx';
 import { calcOdds, fmtOdd } from '../odds.js';
@@ -17,13 +17,14 @@ export default function Votar() {
   const [lanUrl, setLanUrl] = useState(null); // URL da /votar apontando pro IP da maquina (so local)
 
   // Tela de voto atualiza com menos frequencia (economiza requisicoes dos celulares)
-  const { state, apply } = useLiveState(3000);
+  const { state, apply, offsetRef } = useLiveState(3000);
   const tallies = state?.tallies || { verde: 0, rosa: 0, total: 0 };
 
   // reflete voto atual se o nome salvo ja estiver registrado
   useEffect(() => {
     const meu = localStorage.getItem(NOME_KEY);
-    if (!state || !meu || trocando) return;
+    // com as apostas fechadas nao da mais para trocar: volta a mostrar o voto
+    if (!state || !meu || (trocando && state.bettingOpen)) return;
     const v = state.votes.find((x) => x.name.toLowerCase() === meu.trim().toLowerCase());
     setMeuVoto(v ? v.choice : null);
   }, [state, trocando]);
@@ -47,13 +48,18 @@ export default function Votar() {
       return;
     }
     unlockAudio();
-    localStorage.setItem(NOME_KEY, clean);
-    setMeuVoto(escolha);
-    setTrocando(false);
-    const r = await post('/api/vote', { name: clean, choice: escolha });
-    if (r.ok) apply(r.state);
-    else {
-      setMeuVoto(null);
+    const r = await post('/api/vote', { name: clean, choice: escolha, device: deviceId() });
+    if (r.ok) {
+      // so guarda o nome depois de aceito (senao poderia exibir o voto de outra pessoa)
+      localStorage.setItem(NOME_KEY, clean);
+      setMeuVoto(escolha);
+      setTrocando(false);
+      apply(r.state);
+    } else if (r.code === 'name-taken') {
+      setErro('Esse nome já foi usado por outra pessoa. Use um nome diferente (ex.: com sobrenome).');
+    } else if (r.code === 'closed') {
+      setErro('As apostas foram encerradas.');
+    } else {
       setErro('Não foi possível registrar a aposta. Tente de novo.');
     }
   }
@@ -66,6 +72,46 @@ export default function Votar() {
 
   const odds = calcOdds(tallies);
   const votarUrl = lanUrl || `${window.location.origin}/votar`;
+
+  // ---------- Revelacao (no relogio do servidor) ----------
+  const reveal = state?.reveal;
+  const serverNow = Date.now() + offsetRef.current;
+  const emRevelacao = reveal?.status === 'countdown' && reveal.result && reveal.startedAt;
+  const revelado = emRevelacao && serverNow >= reveal.startedAt + REVEAL_DURATION_MS;
+  const apostasAbertas = state?.bettingOpen ?? true;
+
+  // ---------- Resultado no celular ----------
+  if (revelado) {
+    const menino = reveal.result === 'verde';
+    const cravou = meuVoto === reveal.result;
+    return (
+      <div className="page">
+        <TopBar />
+        <div className="faixa-ouro" />
+        <div className="votar-wrap">
+          <div className={`confirmacao resultado ${reveal.result}`}>
+            <div className="check">{menino ? '💚' : '💗'}</div>
+            <h2>{menino ? 'É MENINO!' : 'É MENINA!'}</h2>
+            {meuVoto ? (
+              <>
+                <div className="resultado-palpite">{cravou ? 'Você cravou! 🎉' : 'Furou 😅'}</div>
+                <p>
+                  {cravou
+                    ? `Boa, ${nome.trim()}! Seu palpite estava certo.`
+                    : `Não foi dessa vez, ${nome.trim()}. Avanti mesmo assim!`}
+                </p>
+              </>
+            ) : (
+              <p>Você não chegou a apostar, mas a festa é sua também. Avanti!</p>
+            )}
+          </div>
+          <p className="rodape">
+            <b>AVANTI PALESTRA!</b> 🌴
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // ---------- Tela de confirmacao ----------
   if (meuVoto) {
@@ -88,11 +134,17 @@ export default function Votar() {
             <p>
               Odd atual: <b>{fmtOdd(odds[meuVoto])}</b> (muda conforme a galera aposta)
             </p>
-            <div>
-              <button className="link-trocar" onClick={trocar}>
-                Cancelar e apostar de novo
-              </button>
-            </div>
+            {apostasAbertas ? (
+              <div>
+                <button className="link-trocar" onClick={trocar}>
+                  Cancelar e apostar de novo
+                </button>
+              </div>
+            ) : (
+              <div className="aviso-encerrado">
+                {emRevelacao ? 'A revelação começou! Olhe o telão 👀' : '🔒 Apostas encerradas'}
+              </div>
+            )}
           </div>
 
           <div className="mini-stat">
@@ -109,6 +161,38 @@ export default function Votar() {
           <p className="rodape">
             Fique de olho no telão pra <b>REVELAÇÃO</b>. Avanti Palestra!
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ---------- Apostas encerradas (sem voto deste aparelho) ----------
+  if (!apostasAbertas) {
+    return (
+      <div className="page">
+        <TopBar />
+        <div className="faixa-ouro" />
+        <div className="votar-wrap">
+          <div className="confirmacao">
+            <div className="check">🔒</div>
+            <h2>Apostas encerradas</h2>
+            <p>
+              {emRevelacao
+                ? 'A revelação começou! Olhe o telão 👀'
+                : 'O mercado fechou. Agora é esperar a revelação!'}
+            </p>
+          </div>
+          <div className="mini-stat">
+            <span>
+              💚 <b>{tallies.verde}</b>
+            </span>
+            <span>
+              💗 <b>{tallies.rosa}</b>
+            </span>
+            <span>
+              Apostas: <b>{tallies.total}</b>
+            </span>
+          </div>
         </div>
       </div>
     );

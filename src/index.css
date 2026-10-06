@@ -517,7 +517,7 @@ input {
 .placar-total {
   position: absolute;
   z-index: 4;
-  bottom: 18px;
+  bottom: 64px; /* acima da faixa de ultimas apostas */
   left: 0;
   right: 0;
   text-align: center;
@@ -989,4 +989,128 @@ input {
     box-shadow: none;
     border-color: var(--verde);
   }
+}
+
+/* ============================================================
+   EXTRAS: som do telao, apostas encerradas, ultimas apostas,
+   resultado no celular
+   ============================================================ */
+.btn-ativar-som {
+  position: absolute;
+  z-index: 6;
+  top: 16px;
+  left: 16px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 2px solid #f0d060;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(13px, 1.6vw, 18px);
+  letter-spacing: 1px;
+  cursor: pointer;
+  animation: pulsoSom 1.6s ease-in-out infinite;
+}
+@keyframes pulsoSom {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 208, 96, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(240, 208, 96, 0);
+  }
+}
+
+.placar-total .encerradas {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid #f0d060;
+  color: #f0d060;
+}
+
+.ticker {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  border-top: 2px solid #f0d060;
+  pointer-events: none;
+}
+.ticker-faixa {
+  display: flex;
+  white-space: nowrap;
+  animation: tickerRola linear infinite;
+}
+.ticker-item {
+  padding: 0 28px;
+  font-weight: 800;
+  font-size: clamp(13px, 1.8vw, 20px);
+  letter-spacing: 1px;
+}
+.ticker-item::after {
+  content: '•';
+  margin-left: 56px;
+  color: #f0d060;
+}
+.ticker-item.verde {
+  color: #8dffbf;
+}
+.ticker-item.rosa {
+  color: #ffc4be;
+}
+@keyframes tickerRola {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.btn-encerrar {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: #f0d060;
+  border: none;
+  color: #1a1400;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.aviso-encerrado {
+  margin-top: 14px;
+  font-weight: 800;
+  color: #f0d060;
+}
+
+.confirmacao.resultado.verde {
+  background: radial-gradient(circle at 50% 30%, #5bf39a, #17c964 50%, #04351d);
+  border-color: #5bf39a;
+}
+.confirmacao.resultado.rosa {
+  background: radial-gradient(circle at 50% 30%, #f2b0a9, #d3574e 50%, #4a1714);
+  border-color: #f2b0a9;
+}
+.confirmacao.resultado h2 {
+  font-size: 40px;
+}
+.confirmacao.resultado p {
+  color: rgba(255, 255, 255, 0.9);
+}
+.resultado-palpite {
+  margin: 10px 0 6px;
+  font-size: 24px;
+  font-weight: 900;
 }

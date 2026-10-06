@@ -16,6 +16,12 @@ e tela de revelação sincronizada em todos os dispositivos. Visual com identida
 - A revelação é disparada pelo painel `/revelar`: o servidor marca o horário de início
   (3s no futuro) e todas as telas contam juntas pelo relógio do servidor.
 - Som da revelação: menino → "Acabou, acabou, é tetra!" e depois o hino; menina → hino.
+  No telão, clique em **🔊 Ativar som** antes (o navegador bloqueia áudio sem um clique).
+- **Apostas encerradas:** o painel pode fechar/reabrir as apostas; elas também fecham
+  sozinhas quando a revelação começa.
+- **Nome preso ao aparelho:** só o celular que registrou um nome consegue trocar aquele voto.
+- Cada celular mostra **"Você cravou! 🎉" / "Furou 😅"** quando a contagem termina, e o telão
+  tem uma faixa com as últimas apostas.
 
 As três rotas:
 

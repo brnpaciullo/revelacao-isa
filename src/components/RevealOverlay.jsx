@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Confetti from './Confetti.jsx';
+import { REVEAL_DURATION_MS } from '../live.js';
 import { playTick, playRoll, playCelebration, playSong, stopSong } from '../sounds.js';
 
 // Som do estouro dos fogos (so menino); quando termina, entra a musica do resultado.
@@ -11,8 +12,8 @@ const SONGS = {
   rosa: '/hino-palmeiras.mp3',
 };
 
-const COUNT_FROM = 5;
-const EXPLODE_AT = COUNT_FROM * 1000;
+const EXPLODE_AT = REVEAL_DURATION_MS;
+const COUNT_FROM = EXPLODE_AT / 1000;
 
 // Menino: "Acabou, acabou, e tetra!" junto com os fogos e, ao terminar, a musica do
 // resultado. Menina: direto a musica do resultado.
