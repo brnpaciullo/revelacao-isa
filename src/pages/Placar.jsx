@@ -34,6 +34,20 @@ export default function Placar() {
   const pctRosa = 100 - pctVerde;
   const odds = calcOdds(tallies);
 
+  // Vantagem do lider: 0 (empate) a 1 (todos num lado so). Quanto maior, mais o nome
+  // do lider cresce e se projeta no fundo, e mais o do outro lado encolhe e vira sombra.
+  const vantagem = total > 0 ? Math.abs(verde - rosa) / total : 0;
+  const lider = verde > rosa ? 'verde' : rosa > verde ? 'rosa' : null;
+  const estiloBloco = (lado) => {
+    if (!lider) return undefined;
+    const ganhando = lado === lider;
+    const escala = ganhando ? 1 + 0.15 * vantagem : 1 - 0.3 * vantagem;
+    return {
+      transform: 'translateY(-50%) scale(' + escala + ')',
+      opacity: ganhando ? 1 : 1 - 0.6 * vantagem,
+    };
+  };
+
   // Rosa fica por cima, recortado numa diagonal; Verde e o fundo cheio.
   const clipRosa = `polygon(${split + SKEW}% 0, 100% 0, 100% 100%, ${split - SKEW}% 100%)`;
   // Costura dourada: uma faixa fina ao longo da diagonal.
@@ -64,14 +78,24 @@ export default function Placar() {
         <div className="badge">CHÁ REVELAÇÃO • AVANTI!</div>
       </div>
 
-      <div className="bloco-verde placar-conteudo">
+      {lider && (
+        <div
+          className="marca-dagua titulo"
+          style={{ opacity: 0.06 + 0.16 * vantagem }}
+          aria-hidden="true"
+        >
+          {lider === 'verde' ? 'MENINO' : 'MENINA'}
+        </div>
+      )}
+
+      <div className="bloco-verde placar-conteudo" style={estiloBloco('verde')}>
         <div className="lado-nome titulo">MENINO</div>
         <div className="lado-pct titulo">{pctVerde}%</div>
         <div className="lado-votos">💚 {verde} votos</div>
         <div className="lado-odd">ODD {fmtOdd(odds.verde)}</div>
       </div>
 
-      <div className="bloco-rosa placar-conteudo">
+      <div className="bloco-rosa placar-conteudo" style={estiloBloco('rosa')}>
         <div className="lado-nome titulo">MENINA</div>
         <div className="lado-pct titulo">{pctRosa}%</div>
         <div className="lado-votos">{rosa} votos 💗</div>
