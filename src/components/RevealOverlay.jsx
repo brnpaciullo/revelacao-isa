@@ -94,7 +94,7 @@ export default function RevealOverlay({ result, startAt, votes, onClose }) {
 
       <div className="placares-palpite">
         <div className="coluna-palpite acertou">
-          <h4>✅ Cravaram ({acertaram.length})</h4>
+          <h4>🟢 Deu green ({acertaram.length})</h4>
           <ul>
             {acertaram.length === 0 && <li style={{ opacity: 0.6 }}>Ninguém…</li>}
             {acertaram.map((v, i) => (
@@ -103,7 +103,7 @@ export default function RevealOverlay({ result, startAt, votes, onClose }) {
           </ul>
         </div>
         <div className="coluna-palpite errou">
-          <h4>❌ Furaram ({erraram.length})</h4>
+          <h4>🔴 Deu red ({erraram.length})</h4>
           <ul>
             {erraram.length === 0 && <li style={{ opacity: 0.6 }}>Ninguém…</li>}
             {erraram.map((v, i) => (

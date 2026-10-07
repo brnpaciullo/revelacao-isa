@@ -94,7 +94,7 @@ export default function Votar() {
             <h2>{menino ? 'É MENINO!' : 'É MENINA!'}</h2>
             {meuVoto ? (
               <>
-                <div className="resultado-palpite">{cravou ? 'Você cravou! 🎉' : 'Furou 😅'}</div>
+                <div className="resultado-palpite">{cravou ? 'Deu green! 🟢🎉' : 'Deu red 🔴😅'}</div>
                 <p>
                   {cravou
                     ? `Boa, ${nome.trim()}! Seu palpite estava certo.`
