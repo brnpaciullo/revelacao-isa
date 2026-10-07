@@ -27,7 +27,41 @@ function playExplosionSound(result) {
   else playResultSong();
 }
 
-// Fases: 'wait' (antes do horario marcado) -> 'countdown' (5..1) -> 'explode'.
+// Nomes em grade (lado a lado). Se nao couberem no espaco, a grade rola sozinha,
+// desce e volta, porque no telao ninguem vai rolar a lista na mao.
+const ROLAGEM_PX_POR_SEG = 25;
+
+function ListaNomes({ votos }) {
+  const caixa = useRef(null);
+  const grade = useRef(null);
+  const [sobra, setSobra] = useState(0); // px que nao cabem na caixa
+
+  useEffect(() => {
+    const medir = () => {
+      if (!caixa.current || !grade.current) return;
+      setSobra(Math.max(0, grade.current.offsetHeight - caixa.current.clientHeight));
+    };
+    medir();
+    window.addEventListener('resize', medir);
+    return () => window.removeEventListener('resize', medir);
+  }, [votos.length]);
+
+  if (votos.length === 0) return <div className="nomes-vazio">Ninguém…</div>;
+  const rolagem = sobra
+    ? { '--rolagem': -sobra + 'px', animationDuration: Math.max(6, sobra / ROLAGEM_PX_POR_SEG) + 's' }
+    : undefined;
+  return (
+    <div className="nomes-caixa" ref={caixa}>
+      <ul ref={grade} className={sobra ? 'nomes-grade rolando' : 'nomes-grade'} style={rolagem}>
+        {votos.map((v, i) => (
+          <li key={i}>{v.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Fases: 'wait' (antes do horario marcado) -> 'countdown' (10..1) -> 'explode'.
 // A linha do tempo segue startAt (horario combinado pelo servidor), entao todas as
 // telas contam juntas, mesmo quem descobriu a revelacao um pouco depois.
 // props: result ('verde'|'rosa'), startAt (ms, relogio local), votes (array), onClose (fn)
@@ -95,21 +129,11 @@ export default function RevealOverlay({ result, startAt, votes, onClose }) {
       <div className="placares-palpite">
         <div className="coluna-palpite acertou">
           <h4>🟢 Deu green ({acertaram.length})</h4>
-          <ul>
-            {acertaram.length === 0 && <li style={{ opacity: 0.6 }}>Ninguém…</li>}
-            {acertaram.map((v, i) => (
-              <li key={i}>{v.name}</li>
-            ))}
-          </ul>
+          <ListaNomes votos={acertaram} />
         </div>
         <div className="coluna-palpite errou">
           <h4>🔴 Deu red ({erraram.length})</h4>
-          <ul>
-            {erraram.length === 0 && <li style={{ opacity: 0.6 }}>Ninguém…</li>}
-            {erraram.map((v, i) => (
-              <li key={i}>{v.name}</li>
-            ))}
-          </ul>
+          <ListaNomes votos={erraram} />
         </div>
       </div>
 

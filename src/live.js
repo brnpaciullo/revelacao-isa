@@ -56,11 +56,11 @@ export async function post(path, body) {
 }
 
 // Duracao da contagem regressiva, do inicio ate a explosao.
-export const REVEAL_DURATION_MS = 5000;
+export const REVEAL_DURATION_MS = 10000;
 
-// Contagem (5s) + tempo para quem abre a pagina atrasado ainda pegar a revelacao.
+// Contagem + tempo para quem abre a pagina atrasado ainda pegar a revelacao.
 // Depois disso, uma revelacao antiga gravada no servidor nao reabre sozinha.
-const REVEAL_RESUME_MS = 7000;
+const REVEAL_RESUME_MS = REVEAL_DURATION_MS + 2000;
 
 // Decide quando abrir/fechar a tela de revelacao a partir do estado do servidor.
 // Retorna { result, startAt } (startAt no relogio deste aparelho) e uma funcao para fechar.
