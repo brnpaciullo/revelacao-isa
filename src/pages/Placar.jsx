@@ -35,15 +35,18 @@ export default function Placar() {
   const odds = calcOdds(tallies);
 
   // Vantagem do lider: 0 (empate) a 1 (todos num lado so). Quanto maior, mais o nome
-  // do lider cresce e brilha, e mais o do outro lado encolhe e some numa sombra.
+  // do lider cresce, brilha e vai para o meio da tela, e mais o do outro lado encolhe e
+  // some numa sombra.
   const vantagem = total > 0 ? Math.abs(verde - rosa) / total : 0;
   const lider = verde > rosa ? 'verde' : rosa > verde ? 'rosa' : null;
   const estiloBloco = (lado) => {
     if (!lider) return undefined;
     const ganhando = lado === lider;
     const escala = ganhando ? 1 + 0.35 * vantagem : 1 - 0.4 * vantagem;
+    // verde fica a esquerda e anda para a direita; rosa o contrario
+    const rumoAoMeio = ganhando ? (lado === 'verde' ? 1 : -1) * 25 * vantagem : 0;
     return {
-      transform: 'translateY(-50%) scale(' + escala + ')',
+      transform: 'translateX(' + rumoAoMeio + 'vw) translateY(-50%) scale(' + escala + ')',
       opacity: ganhando ? 1 : 1 - 0.75 * vantagem,
       filter: ganhando
         ? 'drop-shadow(0 0 ' + 24 * vantagem + 'px rgba(240, 208, 96, 0.55))'
