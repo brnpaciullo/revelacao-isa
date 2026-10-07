@@ -35,16 +35,19 @@ export default function Placar() {
   const odds = calcOdds(tallies);
 
   // Vantagem do lider: 0 (empate) a 1 (todos num lado so). Quanto maior, mais o nome
-  // do lider cresce e se projeta no fundo, e mais o do outro lado encolhe e vira sombra.
+  // do lider cresce e brilha, e mais o do outro lado encolhe e some numa sombra.
   const vantagem = total > 0 ? Math.abs(verde - rosa) / total : 0;
   const lider = verde > rosa ? 'verde' : rosa > verde ? 'rosa' : null;
   const estiloBloco = (lado) => {
     if (!lider) return undefined;
     const ganhando = lado === lider;
-    const escala = ganhando ? 1 + 0.15 * vantagem : 1 - 0.3 * vantagem;
+    const escala = ganhando ? 1 + 0.35 * vantagem : 1 - 0.4 * vantagem;
     return {
       transform: 'translateY(-50%) scale(' + escala + ')',
-      opacity: ganhando ? 1 : 1 - 0.6 * vantagem,
+      opacity: ganhando ? 1 : 1 - 0.75 * vantagem,
+      filter: ganhando
+        ? 'drop-shadow(0 0 ' + 24 * vantagem + 'px rgba(240, 208, 96, 0.55))'
+        : 'blur(' + 4 * vantagem + 'px) brightness(' + (1 - 0.6 * vantagem) + ')',
     };
   };
 
@@ -77,16 +80,6 @@ export default function Placar() {
         <Crest size={64} />
         <div className="badge">CHÁ REVELAÇÃO • AVANTI!</div>
       </div>
-
-      {lider && (
-        <div
-          className="marca-dagua titulo"
-          style={{ opacity: 0.06 + 0.16 * vantagem }}
-          aria-hidden="true"
-        >
-          {lider === 'verde' ? 'MENINO' : 'MENINA'}
-        </div>
-      )}
 
       <div className="bloco-verde placar-conteudo" style={estiloBloco('verde')}>
         <div className="lado-nome titulo">MENINO</div>
