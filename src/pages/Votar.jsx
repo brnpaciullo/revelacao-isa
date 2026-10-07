@@ -205,9 +205,7 @@ export default function Votar() {
       <div className="faixa-ouro" />
       <div className="votar-wrap">
         <div className="aposta-header">
-          <div className="chamada">Casa de Apostas do Verdão • só de brincadeira</div>
           <h1 className="titulo">Em quem você vai apostar?</h1>
-          <div className="sub">Palpite o sexo do bebê. Sem dinheiro, só honra de torcedor.</div>
         </div>
 
         <div className="cupom">
@@ -282,7 +280,7 @@ export default function Votar() {
         )}
 
         <p className="rodape">
-          <b>AVANTI PALESTRA!</b> — jogo de palpite, sem valor em dinheiro.
+          <b>AVANTI PALESTRA!</b>
         </p>
       </div>
     </div>
