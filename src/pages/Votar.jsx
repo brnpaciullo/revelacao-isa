@@ -214,7 +214,7 @@ export default function Votar() {
             <input
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="Ex: Tio Palmeirense"
+              placeholder="Ex: Bruno tio, Isa mãe, Douglas avô"
               maxLength={40}
               autoComplete="name"
             />
