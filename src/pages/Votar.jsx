@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLiveState, post, deviceId, REVEAL_DURATION_MS } from '../live.js';
 import { unlockAudio } from '../sounds.js';
@@ -79,6 +79,27 @@ export default function Votar() {
   const emRevelacao = reveal?.status === 'countdown' && reveal.result && reveal.startedAt;
   const revelado = emRevelacao && serverNow >= reveal.startedAt + REVEAL_DURATION_MS;
   const apostasAbertas = state?.bettingOpen ?? true;
+
+  // Na hora da explosao: vibra o celular (so Android; o iPhone nao deixa site vibrar)
+  // e re-renderiza para o resultado aparecer na hora, sem esperar a proxima consulta.
+  const [, setAgora] = useState(0);
+  const vibrou = useRef(null);
+  const revelaEm = emRevelacao ? reveal.startedAt + REVEAL_DURATION_MS : null;
+  useEffect(() => {
+    if (!revelaEm || vibrou.current === revelaEm) return;
+    const falta = revelaEm - (Date.now() + offsetRef.current);
+    if (falta < -5000) return; // revelacao antiga, nao vibra ao abrir a pagina depois
+    const id = setTimeout(() => {
+      vibrou.current = revelaEm;
+      try {
+        navigator.vibrate?.([400, 150, 400, 150, 800]);
+      } catch {
+        /* navegador sem suporte */
+      }
+      setAgora(Date.now());
+    }, Math.max(0, falta));
+    return () => clearTimeout(id);
+  }, [revelaEm, offsetRef]);
 
   // ---------- Resultado no celular ----------
   if (revelado) {
