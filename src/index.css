@@ -1154,6 +1154,10 @@ input {
 .tremer {
   animation: tremer 0.1s linear 14;
 }
+/* o tremor desloca a pagina alguns px; sem isso o celular mostraria rolagem lateral */
+#root {
+  overflow-x: clip;
+}
 @keyframes tremer {
   0%,
   100% {

@@ -7,8 +7,25 @@ import { calcOdds, fmtOdd } from '../odds.js';
 
 const NOME_KEY = 'revelacao:nome';
 
+// localStorage pode lancar erro (alguns navegadores dentro de apps, armazenamento
+// bloqueado). Sem essa protecao a pagina inteira ficaria em branco.
+function lerNome() {
+  try {
+    return localStorage.getItem(NOME_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+function salvarNome(nome) {
+  try {
+    localStorage.setItem(NOME_KEY, nome);
+  } catch {
+    /* sem armazenamento: o voto vale, so nao fica lembrado neste aparelho */
+  }
+}
+
 export default function Votar() {
-  const [nome, setNome] = useState(() => localStorage.getItem(NOME_KEY) || '');
+  const [nome, setNome] = useState(lerNome);
   const [escolha, setEscolha] = useState(null);
   const [meuVoto, setMeuVoto] = useState(null); // 'verde' | 'rosa' quando ja votou
   const [trocando, setTrocando] = useState(false); // clicou em 'apostar de novo'
@@ -22,7 +39,7 @@ export default function Votar() {
 
   // reflete voto atual se o nome salvo ja estiver registrado
   useEffect(() => {
-    const meu = localStorage.getItem(NOME_KEY);
+    const meu = lerNome();
     // com as apostas fechadas nao da mais para trocar: volta a mostrar o voto
     if (!state || !meu || (trocando && state.bettingOpen)) return;
     const v = state.votes.find((x) => x.name.toLowerCase() === meu.normalize('NFC').trim().toLowerCase());
@@ -51,7 +68,7 @@ export default function Votar() {
     const r = await post('/api/vote', { name: clean, choice: escolha, device: deviceId() });
     if (r.ok) {
       // so guarda o nome depois de aceito (senao poderia exibir o voto de outra pessoa)
-      localStorage.setItem(NOME_KEY, clean);
+      salvarNome(clean);
       setMeuVoto(escolha);
       setTrocando(false);
       apply(r.state);
