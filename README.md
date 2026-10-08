@@ -1,4 +1,4 @@
-# 🌴 Verdão Revela — Chá Revelação estilo casa de apostas
+# <img src="public/escudo.webp" width="32" alt=""> Verdão Revela — Chá Revelação estilo casa de apostas
 
 Web app de **chá revelação** com votação ao vivo, placar animado (divisão diagonal Verde × Rosa)
 e tela de revelação sincronizada em todos os dispositivos. Visual com identidade do **Palmeiras**
@@ -102,4 +102,4 @@ revelacao/
    └─ pages/           # Votar, Placar, Revelar
 ```
 
-Avanti Palestra! 🌴
+Avanti Palestra! <img src="public/escudo.webp" width="20" alt="">

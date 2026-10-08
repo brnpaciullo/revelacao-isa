@@ -149,7 +149,7 @@ export default function Votar() {
             )}
           </div>
           <p className="rodape">
-            <b>AVANTI PALESTRA!</b> 🌴
+            <b>AVANTI PALESTRA!</b> <span className="rodape-escudo"><Crest size={18} /></span>
           </p>
         </div>
       </div>

@@ -913,6 +913,10 @@ input {
 .rodape b {
   color: var(--ouro-claro);
 }
+.rodape-escudo {
+  display: inline-block;
+  vertical-align: middle;
+}
 
 /* ============================================================
    PAGINA /qr — cartaz imprimivel
