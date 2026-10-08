@@ -38,7 +38,7 @@ export default function Votar() {
 
   async function apostar() {
     setErro('');
-    const clean = nome.trim();
+    const clean = nome.normalize('NFC').trim();
     if (!clean) {
       setErro('Digite seu nome para registrar a aposta.');
       return;
