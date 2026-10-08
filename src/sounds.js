@@ -6,6 +6,12 @@ function ac() {
   if (!ctx) {
     const AC = window.AudioContext || window.webkitAudioContext;
     ctx = new AC();
+    // iPhone: toca mesmo com a chave do silencioso ligada (Safari 17+)
+    try {
+      if (navigator.audioSession) navigator.audioSession.type = 'playback';
+    } catch {
+      /* sem suporte */
+    }
   }
   if (ctx.state === 'suspended') ctx.resume();
   return ctx;

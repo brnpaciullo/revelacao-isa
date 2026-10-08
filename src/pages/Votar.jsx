@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLiveState, post, deviceId, REVEAL_DURATION_MS } from '../live.js';
-import { unlockAudio } from '../sounds.js';
+import { unlockAudio, playCelebration } from '../sounds.js';
 import Crest from '../components/Crest.jsx';
 import { calcOdds, fmtOdd } from '../odds.js';
 
@@ -80,9 +80,24 @@ export default function Votar() {
   const revelado = emRevelacao && serverNow >= reveal.startedAt + REVEAL_DURATION_MS;
   const apostasAbertas = state?.bettingOpen ?? true;
 
-  // Na hora da explosao: vibra o celular (so Android; o iPhone nao deixa site vibrar)
+  // O navegador so libera som depois de um toque na pagina. Quem votou ja tocou,
+  // mas quem recarregou a pagina precisa tocar de novo (botao abaixo).
+  const [somAtivo, setSomAtivo] = useState(false);
+  useEffect(() => {
+    if (somAtivo) return;
+    const ativar = () => {
+      unlockAudio();
+      setSomAtivo(true);
+    };
+    const eventos = ['pointerdown', 'touchend', 'keydown'];
+    eventos.forEach((e) => window.addEventListener(e, ativar));
+    return () => eventos.forEach((e) => window.removeEventListener(e, ativar));
+  }, [somAtivo]);
+
+  // Na hora da explosao: vibra (so Android; o iPhone nao deixa site vibrar), toca a
+  // fanfarra, faz a tela tremer e piscar na cor do resultado (funciona no iPhone tambem)
   // e re-renderiza para o resultado aparecer na hora, sem esperar a proxima consulta.
-  const [, setAgora] = useState(0);
+  const [tremendo, setTremendo] = useState(false);
   const vibrou = useRef(null);
   const revelaEm = emRevelacao ? reveal.startedAt + REVEAL_DURATION_MS : null;
   useEffect(() => {
@@ -96,17 +111,24 @@ export default function Votar() {
       } catch {
         /* navegador sem suporte */
       }
-      setAgora(Date.now());
+      playCelebration();
+      setTremendo(true);
     }, Math.max(0, falta));
     return () => clearTimeout(id);
   }, [revelaEm, offsetRef]);
+  useEffect(() => {
+    if (!tremendo) return;
+    const id = setTimeout(() => setTremendo(false), 2000);
+    return () => clearTimeout(id);
+  }, [tremendo]);
 
   // ---------- Resultado no celular ----------
   if (revelado) {
     const menino = reveal.result === 'verde';
     const cravou = meuVoto === reveal.result;
     return (
-      <div className="page">
+      <div className={tremendo ? 'page tremer' : 'page'}>
+        {tremendo && <div className={`flash-revelacao ${reveal.result}`} />}
         <TopBar />
         <div className="faixa-ouro" />
         <div className="votar-wrap">
@@ -182,6 +204,10 @@ export default function Votar() {
           <p className="rodape">
             Fique de olho no telão pra <b>REVELAÇÃO</b>. Avanti Palestra!
           </p>
+          {!somAtivo && (
+            // o toque em si e tratado pelos eventos globais acima
+            <button className="btn-som-celular">🔊 Toque aqui para ouvir a revelação</button>
+          )}
         </div>
       </div>
     );
@@ -214,6 +240,10 @@ export default function Votar() {
               Apostas: <b>{tallies.total}</b>
             </span>
           </div>
+          {!somAtivo && (
+            // o toque em si e tratado pelos eventos globais acima
+            <button className="btn-som-celular">🔊 Toque aqui para ouvir a revelação</button>
+          )}
         </div>
       </div>
     );

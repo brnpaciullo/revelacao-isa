@@ -1145,3 +1145,68 @@ input {
   font-size: 24px;
   font-weight: 900;
 }
+
+/* Revelacao no celular: tela treme e pisca na cor do resultado */
+.tremer {
+  animation: tremer 0.1s linear 14;
+}
+@keyframes tremer {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-6px, 3px) rotate(-0.6deg);
+  }
+  50% {
+    transform: translate(5px, -4px) rotate(0.5deg);
+  }
+  75% {
+    transform: translate(-4px, -2px) rotate(-0.3deg);
+  }
+}
+.flash-revelacao {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  animation: piscarRevelacao 2s ease-out forwards;
+}
+.flash-revelacao.verde {
+  background: #5bf39a;
+}
+.flash-revelacao.rosa {
+  background: #f2b0a9;
+}
+@keyframes piscarRevelacao {
+  0%,
+  24%,
+  48% {
+    opacity: 0.9;
+  }
+  12%,
+  36% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tremer {
+    animation: none;
+  }
+}
+.btn-som-celular {
+  display: block;
+  margin: 18px auto 0;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 2px solid #f0d060;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  animation: pulsoSom 1.6s ease-in-out infinite;
+}
