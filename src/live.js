@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 // Estado ao vivo por "polling": cada tela pergunta ao servidor a cada poucos
 // segundos (as funcoes da Vercel nao mantem conexao aberta, entao nao ha WebSocket).
-// Pausa quando a aba esta escondida, para nao gastar requisicoes a toa.
-export function useLiveState(intervalMs = 1500) {
+// Pausa quando a aba esta escondida, para nao gastar requisicoes a toa. O telao passa
+// pausar=false: alguns navegadores de Smart TV dizem que a aba esta escondida mesmo
+// na tela, e o placar ficaria parado.
+export function useLiveState(intervalMs = 1500, pausar = true) {
   const [state, setState] = useState(null);
   const [connected, setConnected] = useState(true);
   // diferenca entre o relogio do servidor e o deste aparelho
@@ -21,7 +23,7 @@ export function useLiveState(intervalMs = 1500) {
     let stopped = false;
     async function poll() {
       clearTimeout(timer);
-      if (document.hidden) return;
+      if (pausar && document.hidden) return;
       const sentAt = Date.now();
       try {
         const r = await fetch('/api/state', { cache: 'no-store' });
@@ -41,7 +43,7 @@ export function useLiveState(intervalMs = 1500) {
       clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [intervalMs, apply]);
+  }, [intervalMs, pausar, apply]);
 
   return { state, connected, apply, offsetRef };
 }

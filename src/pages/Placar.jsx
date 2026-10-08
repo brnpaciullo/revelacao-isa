@@ -10,7 +10,7 @@ const EMPTY = { votes: [], tallies: { verde: 0, rosa: 0, total: 0 }, bettingOpen
 const TICKER_SIZE = 12; // quantas apostas recentes passam na faixa
 
 export default function Placar() {
-  const { state, connected: conectado, offsetRef } = useLiveState(1500);
+  const { state, connected: conectado, offsetRef } = useLiveState(1500, false);
   const [revelacao, fecharRevelacao] = useReveal(state, offsetRef);
   const { votes, tallies, bettingOpen } = state || EMPTY;
   // O navegador so libera audio depois de uma interacao com a pagina. Na Smart TV
