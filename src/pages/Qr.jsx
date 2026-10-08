@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import Crest from '../components/Crest.jsx';
 
-// Pagina imprimivel: QR aponta SEMPRE para o IP desta maquina na rede local
-// (o servidor descobre o IP em /api/net), para os celulares da festa escanearem.
+// Pagina imprimivel. Rodando local, o QR aponta para o IP desta maquina na rede
+// (o servidor descobre o IP em /api/net); na Vercel /api/net nao existe e o QR
+// usa o proprio endereco do site.
 export default function Qr() {
   const [url, setUrl] = useState(null);
-  const [erro, setErro] = useState('');
 
   useEffect(() => {
     fetch('/api/net')
       .then((r) => r.json())
       .then((d) => setUrl(d.votarUrl))
-      .catch(() => setErro('Não consegui falar com o servidor. Ele está rodando?'));
+      .catch(() => setUrl(`${window.location.origin}/votar`));
   }, []);
 
   return (
@@ -35,9 +35,7 @@ export default function Qr() {
                 <QRCodeCanvas value={url} size={300} level="M" includeMargin />
               </div>
             ) : (
-              <div className="qr-quadro qr-quadro-vazio">
-                {erro ? erro : 'Gerando QR…'}
-              </div>
+              <div className="qr-quadro qr-quadro-vazio">Gerando QR…</div>
             )}
             {url && <div className="qr-url">{url}</div>}
           </div>

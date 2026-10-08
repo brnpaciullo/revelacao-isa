@@ -25,7 +25,7 @@ export default function Votar() {
     const meu = localStorage.getItem(NOME_KEY);
     // com as apostas fechadas nao da mais para trocar: volta a mostrar o voto
     if (!state || !meu || (trocando && state.bettingOpen)) return;
-    const v = state.votes.find((x) => x.name.toLowerCase() === meu.trim().toLowerCase());
+    const v = state.votes.find((x) => x.name.toLowerCase() === meu.normalize('NFC').trim().toLowerCase());
     setMeuVoto(v ? v.choice : null);
   }, [state, trocando]);
 
