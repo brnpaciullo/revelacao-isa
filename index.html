@@ -3,19 +3,246 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0B2E1A" />
-    <title>Chá Revelação • Avanti!</title>
-    <link rel="icon" type="image/webp" href="/escudo.webp" />
-    <link rel="apple-touch-icon" href="/escudo.webp" />
+    <meta name="theme-color" content="#F3EEE5" />
+    <title>Studio Nami · Terapias Corporais</title>
+    <meta
+      name="description"
+      content="Studio Nami — drenagem linfática, pós-operatório, massagem modeladora, terapêutica, relaxante, ventosaterapia, reflexologia e massagens asiáticas. Agende pelo WhatsApp."
+    />
+    <meta property="og:title" content="Studio Nami · Terapias Corporais" />
+    <meta property="og:description" content="O movimento das águas, o equilíbrio do corpo." />
+    <meta property="og:image" content="/img/og.jpg" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="apple-touch-icon" href="/img/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&family=Marcellus&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+    <header class="topo" id="topo">
+      <a href="#inicio" class="topo__marca" aria-label="Studio Nami, início">
+        <img src="/img/nami-word.png" alt="" width="597" height="136" />
+        <span>Studio</span>
+      </a>
+      <nav class="topo__nav" aria-label="Principal">
+        <a href="#terapias">Terapias</a>
+        <a href="#estudio">O estúdio</a>
+        <a href="#como">Como funciona</a>
+      </nav>
+      <a href="#agendar" class="topo__cta">Agendar</a>
+    </header>
+
+    <main id="conteudo">
+      <!-- HERO -->
+      <section class="hero" id="inicio">
+        <div class="hero__texto">
+          <p class="rotulo rotulo--linha">Studio de terapias corporais</p>
+          <h1 class="hero__logo">
+            <img src="/img/logo-nami.png" alt="Nami" width="597" height="322" />
+          </h1>
+          <p class="hero__frase">
+            O movimento das águas,<br />o equilíbrio do corpo.
+          </p>
+          <p class="hero__sub">
+            Drenagem, pós-operatório, massagens terapêuticas e técnicas orientais —
+            num espaço tranquilo, com hora marcada e tempo só seu.
+          </p>
+          <div class="hero__acoes">
+            <a href="#agendar" class="botao">Agendar horário</a>
+            <a href="#terapias" class="link-seta">Conhecer as terapias</a>
+          </div>
+        </div>
+
+        <figure class="hero__foto">
+          <img src="/img/raios.jpg" fetchpriority="high" alt="Luz do sol atravessando a água do mar" />
+          <figcaption>
+            <span class="kanji" lang="ja">波</span>
+            <span><em>nami</em> — onda, em japonês</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- MANIFESTO -->
+      <section class="manifesto" id="estudio">
+        <div class="manifesto__foto revelar">
+          <img src="/img/gota.jpg" alt="Gota tocando a superfície da água e formando círculos" loading="lazy" />
+        </div>
+        <div class="manifesto__texto revelar">
+          <p class="rotulo">O estúdio</p>
+          <p class="manifesto__grande">
+            Uma onda nunca é igual à outra. <em>O seu corpo também não.</em>
+          </p>
+          <p>
+            Por isso cada sessão começa com uma conversa: como você chegou, o que está
+            sentindo, o que precisa hoje. A partir daí a técnica, o ritmo e a pressão
+            se ajustam a você — e não o contrário.
+          </p>
+          <p>
+            O Nami nasceu da ideia de que o cuidado com o corpo pode ser, ao mesmo tempo,
+            técnico e acolhedor. Resultado e descanso, lado a lado.
+          </p>
+        </div>
+      </section>
+
+      <!-- TERAPIAS -->
+      <section class="terapias" id="terapias">
+        <header class="secao-topo revelar">
+          <p class="rotulo">Terapias</p>
+          <h2>Para cada fase,<br /><em>um cuidado.</em></h2>
+          <p class="secao-topo__nota">
+            Toque em uma terapia para já deixá-la marcada no agendamento.
+          </p>
+        </header>
+
+        <ol class="lista" data-grupo="corpo">
+          <!-- preenchido em main.js -->
+        </ol>
+      </section>
+
+      <!-- ASIATICAS -->
+      <section class="asiaticas" id="asiaticas">
+        <div class="asiaticas__fundo" aria-hidden="true"></div>
+        <div class="asiaticas__conteudo">
+          <header class="secao-topo secao-topo--claro revelar">
+            <p class="rotulo">Massagens asiáticas</p>
+            <h2>Técnicas de tradição oriental, <em>de mãos dadas com o tempo.</em></h2>
+          </header>
+          <ol class="lista lista--clara" data-grupo="asia"></ol>
+        </div>
+      </section>
+
+      <!-- FAIXA DE FOTOS -->
+      <section class="faixa" aria-label="Ambiente do estúdio">
+        <figure class="faixa__a revelar">
+          <img src="/img/maca.jpg" alt="Maca com lençol de linho e toalha enrolada, à luz da tarde" loading="lazy" />
+        </figure>
+        <figure class="faixa__b revelar">
+          <img src="/img/massagem.jpg" alt="Mãos fazendo massagem nas costas" loading="lazy" />
+        </figure>
+        <figure class="faixa__c revelar">
+          <img src="/img/cortina.jpg" alt="Cortina leve ao vento com o mar ao fundo" loading="lazy" />
+        </figure>
+        <p class="faixa__legenda revelar">
+          Luz baixa, lençóis limpos, óleo morno.<br />
+          <em>O resto é com a gente.</em>
+        </p>
+      </section>
+
+      <!-- COMO FUNCIONA -->
+      <section class="como" id="como">
+        <header class="secao-topo revelar">
+          <p class="rotulo">Como funciona</p>
+          <h2>Simples assim.</h2>
+        </header>
+        <div class="passos">
+          <article class="passo revelar">
+            <span class="passo__n">i.</span>
+            <h3>Escolha a terapia</h3>
+            <p>Não sabe qual? Tudo bem — conte o que está sentindo e a gente indica o melhor caminho.</p>
+          </article>
+          <article class="passo revelar">
+            <span class="passo__n">ii.</span>
+            <h3>Combine pelo WhatsApp</h3>
+            <p>Você envia sua preferência de dia e período, e confirmamos o horário com você.</p>
+          </article>
+          <article class="passo revelar">
+            <span class="passo__n">iii.</span>
+            <h3>Chegue com calma</h3>
+            <p>Venha uns minutinhos antes, com roupa confortável. O resto da sessão é sua.</p>
+          </article>
+        </div>
+        <p class="como__nota revelar">
+          Para <strong>pós-operatório</strong>, traga a liberação do seu médico e a data da cirurgia —
+          assim o protocolo começa do jeito certo.
+        </p>
+      </section>
+
+      <!-- AGENDAR -->
+      <section class="agendar" id="agendar">
+        <div class="agendar__lado revelar">
+          <p class="rotulo">Agendamento</p>
+          <h2>Reserve o seu <em>momento.</em></h2>
+          <p>
+            Preencha ao lado e a mensagem já vai pronta para o nosso WhatsApp.
+            Respondemos para confirmar o horário.
+          </p>
+          <img class="agendar__onda" src="/img/onda.png" alt="" width="410" height="143" />
+        </div>
+
+        <form class="form revelar" id="form-agendar" novalidate>
+          <div class="campo">
+            <label for="f-terapia">Terapia</label>
+            <select id="f-terapia" name="terapia">
+              <option value="">Ainda não sei — quero uma indicação</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="f-nome">Seu nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="given-name" placeholder="Como podemos te chamar?" required />
+            <small class="campo__erro" id="erro-nome" hidden>Conta pra gente o seu nome.</small>
+          </div>
+
+          <fieldset class="campo">
+            <legend>Dias de preferência</legend>
+            <div class="chips" data-campo="dias">
+              <label><input type="checkbox" value="Seg" /><span>Seg</span></label>
+              <label><input type="checkbox" value="Ter" /><span>Ter</span></label>
+              <label><input type="checkbox" value="Qua" /><span>Qua</span></label>
+              <label><input type="checkbox" value="Qui" /><span>Qui</span></label>
+              <label><input type="checkbox" value="Sex" /><span>Sex</span></label>
+              <label><input type="checkbox" value="Sáb" /><span>Sáb</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="campo">
+            <legend>Período</legend>
+            <div class="chips" data-campo="periodo">
+              <label><input type="radio" name="periodo" value="Manhã" /><span>Manhã</span></label>
+              <label><input type="radio" name="periodo" value="Tarde" /><span>Tarde</span></label>
+              <label><input type="radio" name="periodo" value="Noite" /><span>Noite</span></label>
+              <label><input type="radio" name="periodo" value="Tanto faz" /><span>Tanto faz</span></label>
+            </div>
+          </fieldset>
+
+          <div class="campo">
+            <label for="f-obs">Alguma observação? <span class="opcional">opcional</span></label>
+            <textarea id="f-obs" name="obs" rows="3" placeholder="Ex.: dor na lombar, gestante, data da cirurgia…"></textarea>
+          </div>
+
+          <button type="submit" class="botao botao--cheio">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Enviar pelo WhatsApp
+          </button>
+          <p class="form__rodape">
+            Prefere conversar direto?
+            <a href="#" data-whats-direto>Chame no WhatsApp</a>
+          </p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="rodape">
+      <img class="rodape__logo" src="/img/logo-nami.png" alt="Nami" width="597" height="322" loading="lazy" />
+      <p class="rotulo">Terapias corporais</p>
+      <div class="rodape__info">
+        <a href="#" data-whats-direto>(41) 99853-1363</a>
+        <span aria-hidden="true">·</span>
+        <span>Atendimento com hora marcada</span>
+      </div>
+      <p class="rodape__fim">© <span id="ano"></span> Studio Nami</p>
+    </footer>
+
+    <a href="#agendar" class="flutuante" aria-label="Agendar pelo WhatsApp">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+      <span>Agendar</span>
+    </a>
+
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
